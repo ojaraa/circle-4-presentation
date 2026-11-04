@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Software Engineering — Slide Presentation</title>
+<style>
+:root {
+  --bg: #101522;
+  --panel: #171f30;
+  --panel-2: #202b40;
+  --text: #f4f6fb;
+  --muted: #b8c2d5;
+  --accent: #83b7ff;
+  --accent-2: #b9d5ff;
+  --line: rgba(255,255,255,.13);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body {
+  background: radial-gradient(ellipse at 80% 15%, #1d3150 0%, transparent 38%), var(--bg);
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+.deck { height: 100%; display: flex; flex-direction: column; }
+.topbar {
+  height: 58px; flex: 0 0 58px; display: flex; align-items: center;
+  justify-content: space-between; padding: 0 5vw; border-bottom: 1px solid var(--line);
+  color: var(--muted); font-size: 13px; letter-spacing: .04em;
+}
+.brand { color: var(--accent-2); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.stage { flex: 1; min-height: 0; display: grid; place-items: center; padding: 4vh 6vw 5vh; }
+.slide {
+  display: none; width: min(1100px, 100%); max-height: 100%; overflow-y: auto;
+  animation: enter .28s ease both;
+}
+.slide.active { display: block; }
+@keyframes enter { from { opacity: .35; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.eyebrow {
+  color: var(--accent); font-size: 13px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .18em; margin: 0 0 20px;
+}
+h1 { font-size: clamp(42px, 6vw, 76px); line-height: 1.04; letter-spacing: -.045em; margin: 0 0 28px; max-width: 950px; }
+h2 { font-size: clamp(30px, 4vw, 48px); line-height: 1.12; letter-spacing: -.035em; margin: 0 0 30px; }
+p, li { font-size: clamp(19px, 2vw, 27px); line-height: 1.55; color: var(--muted); }
+p { max-width: 940px; }
+strong { color: var(--text); }
+.card {
+  background: linear-gradient(135deg, rgba(255,255,255,.065), rgba(255,255,255,.025));
+  border: 1px solid var(--line); border-radius: 22px; padding: clamp(24px, 4vw, 42px);
+  box-shadow: 0 24px 80px rgba(0,0,0,.18);
+}
+.sequence {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+  margin-top: 30px;
+}
+.sequence span {
+  background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px;
+  padding: 14px 18px; font-size: clamp(16px, 1.8vw, 22px); color: var(--text);
+}
+.sequence b { color: var(--accent); font-size: 22px; }
+ol, ul { padding-left: 1.25em; margin: 0; }
+li { padding-left: .25em; margin: 0 0 13px; }
+li::marker { color: var(--accent); font-weight: 700; }
+.compact li { margin-bottom: 7px; font-size: clamp(17px, 1.65vw, 22px); }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.mini-card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 22px 24px; }
+.mini-card h3 { color: var(--accent-2); font-size: 20px; margin: 0 0 8px; }
+.mini-card p { font-size: 18px; margin: 0; }
+.pill-list { display: flex; flex-wrap: wrap; gap: 12px; }
+.pill { border: 1px solid var(--line); background: var(--panel); padding: 14px 18px; border-radius: 999px; font-size: clamp(17px, 1.8vw, 22px); color: var(--text); }
+.definition { border-left: 4px solid var(--accent); padding: 8px 0 8px 25px; }
+.definition p { margin: 0; }
+.subheading { color: var(--accent-2); font-size: 21px; font-weight: 700; margin: 22px 0 12px; }
+.footer {
+  height: 68px; flex: 0 0 68px; display: flex; align-items: center; gap: 18px;
+  padding: 0 5vw; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px;
+}
+.progress { height: 3px; background: rgba(255,255,255,.12); flex: 1; border-radius: 9px; overflow: hidden; }
+.progress > div { height: 100%; background: var(--accent); width: 0; transition: width .25s ease; }
+.controls { display: flex; gap: 8px; }
+button {
+  background: var(--panel-2); border: 1px solid var(--line); color: var(--text);
+  border-radius: 10px; min-width: 38px; height: 36px; cursor: pointer; font-size: 17px;
+}
+button:hover { border-color: var(--accent); }
+.hint { color: #8e9bb1; white-space: nowrap; }
+@media (max-width: 700px) {
+  .topbar { padding: 0 20px; }
+  .stage { padding: 24px 20px; }
+  .two-col { grid-template-columns: 1fr; }
+  .footer { padding: 0 20px; gap: 10px; }
+  .hint { display: none; }
+  .card { padding: 22px; }
+}
+</style>
+</head>
+<body>
+<div class="deck">
+  <header class="topbar">
+    <div class="brand">Software Engineering</div>
+    <div id="counter">01 / 12</div>
+  </header>
+  <main class="stage">
+    <section class="slide active">
+      <p class="eyebrow">Presentation</p>
+      <h1>Software Engineering</h1>
+      <div class="card">
+        <h2>What is Software Engineering?</h2>
+        <p>Software Engineering is the systematic application of engineering principles to creating software that is not just beautiful but also reliable, efficient and maintainable.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">01 · The discipline</p>
+      <h2>SWE is not just about coding  it involves:</h2>
+      <div class="sequence">
+        <span>Understanding  the problem</span><b>⇒</b>
+        <span>Design</span><b>⇒</b>
+        <span>Implement</span><b>⇒</b>
+        <span>Test</span><b>⇒</b>
+        <span>Deploy</span><b>⇒</b>
+        <span>Observe and maintain</span>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">02 · Workflow</p>
+      <h2>A Practical Engineering Workflow</h2>
+      <div class="card">
+        <ol>
+          <li>Clarify the user need and define what “done” means.</li>
+          <li>Break the problem into small, testable tasks.</li>
+          <li>Design the simplest suitable solution.</li>
+          <li>Implement and verify one small change at a time.</li>
+          <li>Use Git, code review, tests, and documentation to protect quality.</li>
+          <li>Deploy, observe real usage, fix problems, and improve.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">03 · Problem solving</p>
+      <h2>Algorithm</h2>
+      <div class="card definition">
+        <p>An algorithm is a step-by-step procedure to solving a problem</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">03 · Problem solving</p>
+      <h2>Flowchart</h2>
+      <div class="card definition">
+        <p>A flowchart is a visual representation of the steps involved in the process of solving a problem</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">04 · Practical activity</p>
+      <h2>Agile Practicum: to explain the concept of Algorithms</h2>
+      <div class="card">
+        <p>Our instructor used Huddle, an online collaboration and messaging tool for small teams to explain how to write an algorithm to solve the problem</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">05 · Programming</p>
+      <h2>Programming Paradigms:</h2>
+      <div class="pill-list">
+        <span class="pill">Procedural Programming</span>
+        <span class="pill">Object-Oriented Programming (OOP)</span>
+        <span class="pill">Functional Programming</span>
+        <span class="pill">Logic Programming</span>
+        <span class="pill">Declarative Programming</span>
+        <span class="pill">Concurrent Programming</span>
+        <span class="pill">Event-Driven Programming</span>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">06 · Foundations</p>
+      <h2>Programming Concepts</h2>
+      <div class="card">
+        <p>Concepts likely to be found in every programming langauge. They are foundations to mastering programming.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">06 · Foundations</p>
+      <h2>Programming Concepts</h2>
+      <div class="card">
+        <ol>
+          <li><strong>Variables:</strong> A strorage location in a memory with a name used to hold data</li>
+          <li><strong>Data Types:</strong> classification of data term, that define operation sthat can be carried out on it. E.g Number, strings, bigInt, Object,</li>
+          <li><strong>Control Structures:</strong> The order of execution of statements in a program
+            <ol class="compact">
+              <li>Conditional statements: if, else, switch.</li>
+              <li>Loops: for, while, do-while.</li>
+              <li>Branching: break, continue, return</li>
+            </ol>
+          </li>
+          <li><strong>Functions (or Methods):</strong> is used to perform a particular task that can be reusable throughout the program</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">06 · Foundations</p>
+      <h2>Programming Concepts</h2>
+      <div class="card">
+        <ol start="5">
+          <li><strong>Data Structures:</strong> A way of organizing and storing data for easy access and modification. Examples are Trees, Stacks, Queues e.t.c</li>
+          <li><strong>Algorithms:</strong> Pre-written mechanisms for solving a problem. Examples bubble sort, Quick sort, sorting e.t.c</li>
+          <li><strong>Big O notation:</strong> A way to measure how difficult/complex a program is in terms of Time and Space
+            <ol class="compact">
+              <li>Time Complexity: How long it takes</li>
+              <li>Space Complexity: The space or memory it takes</li>
+            </ol>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">06 · Foundations</p>
+      <h2>Object-Oriented Programming</h2>
+      <div class="two-col">
+        <div class="mini-card">
+          <h3>Concepts:</h3>
+          <p>Class ⇒ A blueprint of an object</p>
+          <p>Object ⇒ The result of the class</p>
+        </div>
+        <div class="mini-card">
+          <h3>Pillars of OOP</h3>
+          <ul class="compact">
+            <li>Polymorphism</li>
+            <li>Inheritance</li>
+            <li>Abstraction</li>
+            <li>Encapsulation</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">06 · Foundations</p>
+      <h2>Programming Concepts</h2>
+      <div class="card">
+        <ol start="9">
+          <li><strong>Recursion:</strong> A function that calls itself to solve a smaller instance of the same problem</li>
+          <li><strong>Error Handling:</strong> How errors are handled</li>
+          <li><strong>Memory Management</strong></li>
+          <li><strong>Concurrency</strong></li>
+          <li><strong>File I/O</strong></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">07 · The web</p>
+      <h2>How the web works:</h2>
+      <div class="card">
+        <p>When a person enters a URL in a browser (the client), The client asks for the IP Address, through the DNS - Domain Name System  and gives the IP to the server as a request and the server returns with a response in tiny packets in HTML, CSS and JS and displays it in the browser.</p>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <span id="slide-number">1</span>
+    <div class="progress"><div id="progress-fill"></div></div>
+    <span class="hint">Use ← → or Space</span>
+    <div class="controls">
+      <button id="prev" aria-label="Previous slide">←</button>
+      <button id="next" aria-label="Next slide">→</button>
+    </div>
+  </footer>
+</div>
+<script>
+const slides = [...document.querySelectorAll('.slide')];
+let current = 0;
+const counter = document.getElementById('counter');
+const number = document.getElementById('slide-number');
+const fill = document.getElementById('progress-fill');
+function show(index) {
+  current = Math.max(0, Math.min(index, slides.length - 1));
+  slides.forEach((slide, i) => slide.classList.toggle('active', i === current));
+  counter.textContent = String(current + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+  number.textContent = current + 1;
+  fill.style.width = ((current + 1) / slides.length * 100) + '%';
+}
+document.getElementById('prev').addEventListener('click', () => show(current - 1));
+document.getElementById('next').addEventListener('click', () => show(current + 1));
+document.addEventListener('keydown', e => {
+  if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) { e.preventDefault(); show(current + 1); }
+  if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); show(current - 1); }
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+show(0);
+</script>
+</body>
+</html>
